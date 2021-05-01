@@ -6,11 +6,7 @@ export class PriceProvider {
     const market = await this.marketProvider.getMarket(marketId);
     const { vat } = market;
 
-    if (vat >= 1.0) {
-      throw new Error('Invalid VAT value');
-    }
-
-    const grossPrice = netPrice * (1 + vat);
+    const grossPrice = vat.applyTo(netPrice);
 
     return parseFloat(grossPrice.toFixed(2));
   }
