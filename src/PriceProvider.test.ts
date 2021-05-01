@@ -3,10 +3,10 @@ import { MarketProvider } from './MarketProvider';
 import { PriceProvider } from './PriceProvider';
 
 describe('Price provider', () => {
-  const marketWithVat = (vat: number): Market => ({
+  const marketWithVat = (vat?: number): Market => ({
     currency: 'PLN',
     id: '1',
-    vat,
+    vat: vat ?? 0.23,
   });
 
   const markets = [
@@ -92,9 +92,10 @@ describe('Price provider', () => {
 
   it('fails to calculate the gross price when the market could not be fetched', async () => {
     // given
-    const market = marketWithVat(1);
+    const market = marketWithVat();
+    const fetchError = 'Fetch error';
     const marketProvider: MarketProvider = {
-      getMarket: jest.fn().mockRejectedValue('Fetch error'),
+      getMarket: jest.fn().mockRejectedValue(fetchError),
     };
 
     const provider = new PriceProvider(marketProvider);
@@ -103,6 +104,6 @@ describe('Price provider', () => {
     const call = provider.calculateGrossPrice(1, (market as Market).id);
 
     // then
-    await expect(call).rejects.toBeDefined();
+    await expect(call).rejects.toMatch(fetchError);
   });
 });
