@@ -9,6 +9,7 @@ export class Vat {
     return new Vat(value);
   }
 
+  // TODO: expect a valid, non-negative price
   applyTo(price: number) {
     const priceWithVat = price * (1 + this._value);
 
