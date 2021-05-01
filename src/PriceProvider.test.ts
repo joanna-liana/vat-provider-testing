@@ -75,7 +75,7 @@ describe('Price provider', () => {
     const provider = new PriceProvider(marketProvider);
 
     // when
-    const call = provider.calculateGrossPrice(1, (market as Market).id);
+    const call = provider.calculateGrossPrice(1, market.id);
 
     // then
     await expect(call).rejects.toMatch(fetchError);
